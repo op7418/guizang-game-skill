@@ -103,6 +103,16 @@
   body.ready #load { opacity:0; }
   #credit { position:fixed; right:18px; top:14px; top:calc(14px + var(--sat)); z-index:11; font-family:"Kaiti SC","STKaiti","KaiTi",serif; font-size:14px; letter-spacing:.3em; color:#b9ad88; text-decoration:none; padding:4px 0 4px 10px; border-left:1px solid rgba(201,164,92,.7); text-shadow:0 1px 4px #000; opacity:.85; } #credit:hover { color:#f0e4bd; opacity:1; } body.cine #credit { opacity:0; }
   #fs { display:none; position:fixed; right:112px; top:14px; top:calc(14px + var(--sat)); z-index:11; font-size:12px; letter-spacing:.2em; color:#b9ad88; padding:4px 10px; border:1px solid rgba(201,164,92,.55); border-radius:2px; background:rgba(8,7,12,.45); text-shadow:0 1px 3px #000; } body.canfs #fs { display:block; } body.cine #fs { opacity:0; }
+  #gear { position:fixed; right:112px; top:14px; top:calc(14px + var(--sat)); z-index:21; font-size:12px; letter-spacing:.2em; color:#b9ad88; padding:4px 10px; border:1px solid rgba(201,164,92,.55); border-radius:2px; background:rgba(8,7,12,.45); text-shadow:0 1px 3px #000; cursor:pointer; } #gear:hover { color:#f0e4bd; } body.cine #gear { opacity:0; pointer-events:none; } body.canfs #fs { right:172px; }
+  #set { position:fixed; left:0; top:0; right:0; bottom:0; z-index:20; display:none; align-items:center; justify-content:center; background:rgba(4,3,8,.72); cursor:default; } #set.on { display:flex; }
+  #set .box { width:520px; max-width:92vw; max-height:88vh; overflow-y:auto; -webkit-overflow-scrolling:touch; padding:22px 26px 18px; background:linear-gradient(#14121b,#0b0a10); border-top:1px solid rgba(201,164,92,.8); border-bottom:1px solid rgba(201,164,92,.3); box-shadow:0 20px 60px rgba(0,0,0,.7); font-size:13px; letter-spacing:.1em; }
+  #set h3 { margin:0 0 16px; text-align:center; font-family:"Kaiti SC","STKaiti","KaiTi",serif; font-weight:normal; font-size:22px; letter-spacing:.4em; color:#e9dcae; } #set h4 { margin:18px 0 10px; font-weight:normal; font-size:13px; letter-spacing:.4em; color:#c9a45c; border-bottom:1px solid rgba(201,164,92,.25); padding-bottom:6px; }
+  #set .row { display:flex; flex-wrap:wrap; align-items:center; margin-bottom:12px; } #set .row label { width:56px; color:#cfc6ad; } #set .row small { flex-basis:100%; margin:5px 0 0 56px; font-size:11px; color:#77736b; letter-spacing:.04em; line-height:1.6; }
+  #set .seg { display:flex; } #set .seg b, #set .pre b { font-weight:normal; padding:5px 14px; margin-right:6px; border:1px solid rgba(233,228,214,.22); color:#9a958a; cursor:pointer; } #set .seg b.on { color:#0b0a10; background:#d8c48c; border-color:#d8c48c; } #set .seg.na b { opacity:.35; cursor:default; } #set .pre b:hover, #set .seg b:hover { border-color:#d8c48c; }
+  #set .note { font-size:11px; color:#77736b; margin:2px 0 4px; } #set .note b { font-weight:normal; margin-left:8px; padding:2px 8px; border:1px solid rgba(233,228,214,.25); cursor:pointer; color:#9a958a; } #set .note.on { color:#e0b866; } #set .note.on b { color:#0b0a10; background:#e0b866; border-color:#e0b866; }
+  #set .binds { display:flex; flex-wrap:wrap; margin:0 -5px; } #set .bind { width:calc(50% - 10px); margin:0 5px 8px; display:flex; justify-content:space-between; align-items:center; padding:6px 10px; background:rgba(233,228,214,.05); cursor:pointer; } #set .bind b { font-weight:normal; min-width:58px; text-align:center; padding:2px 8px; border:1px solid rgba(201,164,92,.5); color:#e9dcae; font-family:ui-monospace,Menlo,monospace; letter-spacing:0; } #set .bind.wait b { background:#e0b866; color:#0b0a10; border-color:#e0b866; } #set .bind:hover { background:rgba(233,228,214,.1); }
+  #set .close { margin:14px auto 0; width:120px; text-align:center; padding:7px 0; border:1px solid rgba(201,164,92,.6); color:#e9dcae; cursor:pointer; letter-spacing:.3em; } #set .close:hover { background:rgba(201,164,92,.15); }
+  body.touch #set h4, body.touch #set .binds, body.touch #set .pre { display:none; }
   #nogl { position:fixed; left:0; top:0; right:0; bottom:0; z-index:30; display:none; align-items:center; justify-content:center; text-align:center; background:#0b0a10; font-size:15px; line-height:2; letter-spacing:.12em; color:#cfc6ad; padding:24px; }
   /* ---- touch: stick on the left, the skill icons become buttons on the right, health moves to the top ---- */
   .kt { display:none; } body.touch .kt { display:inline; } body.touch .kd { display:none; }
@@ -123,7 +133,7 @@
   body.touch #sub { bottom:36vh; font-size:15px; padding:0 18px; } body.touch #title .made { left:0; right:0; text-align:center; border:none; font-size:11px; bottom:calc(14px + var(--sab)); }
   @media (max-aspect-ratio: 1/1) { #title .logo { width:84vw; } #title .k { padding:0 20px; } #banner .t { font-size:34px; } }
 </style>
-
+<meta name="hd-assets" content="assets-hd">
 </head>
 <body>
 <div id="hud">
@@ -154,6 +164,6 @@
 <div id="stick"><i></i></div>
 <div id="nogl">这台设备的浏览器不支持本游戏需要的 WebGL 2。<br>请换一台较新的手机或电脑再试。<br><br>雾锁山门 · 歸藏作品</div>
 <div id="load"><div class="track"><div id="lbar"></div></div><div id="ltxt">布阵</div><div class="sub"><span id="ltech">three.js · 引擎入阵</span><span id="lpct">3%</span></div></div>
-<script type="module" src="game.04a0afff.js"></script>
+<script type="module" src="game.cdb73b9b.js"></script>
 </body>
 </html>
