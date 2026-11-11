@@ -95,6 +95,7 @@
   #load .sub { margin-top:7px; font:11px ui-monospace,Menlo,monospace; letter-spacing:.08em; color:#6f6b62; } #lpct { margin-left:.8em; color:#8f8463; }
   body.ready #load { opacity:0; }
   #credit { position:fixed; right:18px; top:14px; top:calc(14px + var(--sat)); z-index:11; font-family:"Kaiti SC","STKaiti","KaiTi",serif; font-size:14px; letter-spacing:.3em; color:#b9ad88; text-decoration:none; padding:4px 0 4px 10px; border-left:1px solid rgba(201,164,92,.7); text-shadow:0 1px 4px #000; opacity:.85; } #credit:hover { color:#f0e4bd; opacity:1; } body.cine #credit { opacity:0; }
+  #fs { display:none; position:fixed; right:112px; top:14px; top:calc(14px + var(--sat)); z-index:11; font-size:12px; letter-spacing:.2em; color:#b9ad88; padding:4px 10px; border:1px solid rgba(201,164,92,.55); border-radius:2px; background:rgba(8,7,12,.45); text-shadow:0 1px 3px #000; } body.canfs #fs { display:block; } body.cine #fs { opacity:0; }
   #nogl { position:fixed; left:0; top:0; right:0; bottom:0; z-index:30; display:none; align-items:center; justify-content:center; text-align:center; background:#0b0a10; font-size:15px; line-height:2; letter-spacing:.12em; color:#cfc6ad; padding:24px; }
   /* ---- touch: stick on the left, the skill icons become buttons on the right, health moves to the top ---- */
   .kt { display:none; } body.touch .kt { display:inline; } body.touch .kd { display:none; }
@@ -142,9 +143,10 @@
   <div class="k"><span class="kd">W A S D 移动　左键出剑　按住右键格挡　空格闪避</span><span class="kt">左侧拖动移动　右侧按钮出剑、格挡、闪避</span></div>
   <a class="made" href="https://github.com/op7418/guizang-game-skill" target="_blank" rel="noopener">这个游戏由 AI 用 guizang-game-skill 做成 · 看它是怎么做的 ↗</a></div>
 <a id="credit" href="https://x.com/op7418" target="_blank" rel="noopener">歸藏作品</a>
+<div id="fs">全屏</div>
 <div id="stick"><i></i></div>
 <div id="nogl">这台设备的浏览器不支持本游戏需要的 WebGL 2。<br>请换一台较新的手机或电脑再试。<br><br>雾锁山门 · 歸藏作品</div>
 <div id="load"><div class="track"><div id="lbar"></div></div><div id="ltxt">布阵</div><div class="sub"><span id="ltech">three.js · 引擎入阵</span><span id="lpct">3%</span></div></div>
-<script type="module" src="game.3c8d6844.js"></script>
+<script type="module" src="game.04a0afff.js"></script>
 </body>
 </html>
