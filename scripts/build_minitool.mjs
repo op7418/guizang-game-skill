@@ -63,14 +63,14 @@ const tmp = path.join(OUT, '_t.mp3'); const enc = (src, br) => { execFileSync('f
 for (const n of ['explore', 'combat', 'boss']) if (fs.existsSync(`assets/music/${n}.mp3`)) log('music', n, kb(dataFile('mu_' + n, { [`assets/music/${n}.mp3`]: { b: enc(`assets/music/${n}.mp3`, '36k') } })));
 if (fs.existsSync('assets/music/ambient.mp3')) log('ambient', kb(dataFile('amb', { 'assets/music/ambient.mp3': { b: enc('assets/music/ambient.mp3', '40k') } })));
 // ---- code: classic script, ES2017, no fetch / WASM / dynamic import
-const AUTHOR = '/* 雾锁山门 · 歸藏作品 · https://x.com/op7418 · © 2026 歸藏 Guizang · 未经许可不得转载、改名再发布或商用 · built by AI with guizang-game-skill */';
+const AUTHOR = '/* 雾锁山门 · 歸藏作品 · © 2026 歸藏 Guizang · 未经许可不得转载、改名再发布或商用 · built by AI with guizang-game-skill */';
 const RUNTIME = `(function(){var M={},W={},L={},IDX=${JSON.stringify(IDX)};function k(u){return String(u).replace(/^\\.\\//,'').split('?')[0]}
 window.__D=function(key,v){M[key]=v;var w=W[key];if(w){delete W[key];for(var i=0;i<w.length;i++)w[i][0](v)}};
 function get(u){var key=k(u);return new Promise(function(res,rej){if(M[key])return res(M[key]);var f=IDX[key];if(!f)return rej(new Error('not packed: '+key));(W[key]=W[key]||[]).push([res,rej]);if(L[f])return;L[f]=1;var s=document.createElement('script');s.src='./data/'+f;s.onerror=function(){for(var q in W)if(IDX[q]===f){var w=W[q];delete W[q];for(var i=0;i<w.length;i++)w[i][1](new Error('load failed: '+f))}};document.head.appendChild(s)})}
 function b64(s){var bin=atob(s),n=bin.length,u=new Uint8Array(n);for(var i=0;i<n;i++)u[i]=bin.charCodeAt(i);return u.buffer}
 window.__MINI={get:get,b64:b64};
 window.__lf=function(u){return get(u).then(function(v){return{ok:true,status:200,json:function(){return Promise.resolve(v.j)},arrayBuffer:function(){return Promise.resolve(b64(v.b))},text:function(){return Promise.resolve(JSON.stringify(v.j))}}},function(){return{ok:false,status:404,json:function(){return Promise.reject(new Error('404'))},arrayBuffer:function(){return Promise.reject(new Error('404'))},text:function(){return Promise.reject(new Error('404'))}}})};
-window.__CFG={touch:true,links:false,grass:26000,pixels:1.6e6,shadow:1024,quality:{ao:false,steps:8},trees:12,rocks:30};
+window.__CFG={touch:true,links:false,settings:false,grass:26000,pixels:2.0e6,shadow:1024,quality:{ao:false,steps:8},trees:12,rocks:30};
 if(typeof globalThis==='undefined')window.globalThis=window;
 if(!Array.prototype.flat)Array.prototype.flat=function(d){d=d===undefined?1:d;return this.reduce(function(a,v){return a.concat(Array.isArray(v)&&d>0?v.flat(d-1):[v])},[])};
 if(!Array.prototype.flatMap)Array.prototype.flatMap=function(f,t){return this.map(f,t).flat()};
@@ -80,14 +80,15 @@ if(!Element.prototype.closest)Element.prototype.closest=function(s){var e=this;w
 if(!window.queueMicrotask)window.queueMicrotask=function(f){Promise.resolve().then(f)};
 })();`;
 const r = await build({ entryPoints: ['src/game.js'], bundle: true, format: 'iife', minify: true, write: false, target: ['es2017', 'chrome61'], legalComments: 'none', charset: 'utf8',
-  define: { fetch: '__lf', createImageBitmap: 'undefined' }, alias: { three: './vendor/three/build/three.module.js' },
+  define: { fetch: '__lf', createImageBitmap: 'undefined', __NOFS__: 'true' }, alias: { three: './vendor/three/build/three.module.js' },
   plugins: [{ name: 'mini', setup(b) { b.onResolve({ filter: /^three\/addons\// }, (a) => /meshopt_decoder/.test(a.path) ? { path: 'meshopt-stub', namespace: 'stub' } : { path: path.resolve('vendor/three/jsm', a.path.slice('three/addons/'.length)) });
     b.onLoad({ filter: /.*/, namespace: 'stub' }, () => ({ contents: 'export const MeshoptDecoder = { supported: false, ready: Promise.resolve() };', loader: 'js' })); } }] });
-const js = AUTHOR + '\n' + RUNTIME + '\n' + r.outputFiles[0].text; fs.writeFileSync(path.join(OUT, 'game.js'), js);
+/* this package carries no outbound or social links at all, not even as text */
+const js = AUTHOR + '\n' + RUNTIME + '\n' + r.outputFiles[0].text.replace(/\s*·?\s*https:\/\/x\.com\/op7418/g, ''); fs.writeFileSync(path.join(OUT, 'game.js'), js);
 // ---- html: no inline or module scripts, no outbound links, CSS a Chrome 61 engine can read
 let html = fs.readFileSync('index.html', 'utf8');
 html = html.replace(/<script type="importmap">[\s\S]*?<\/script>\n?/, ''); const i0 = html.indexOf('<script type="module">'), i1 = html.indexOf('</script>', i0) + 9; html = html.slice(0, i0) + '<script src="./game.js"></script>' + html.slice(i1);
-html = html.replace(/<a ([^>]*)>/g, (m, at) => '<span ' + at.replace(/\s*(href|target|rel)="[^"]*"/g, '') + '>').replace(/<\/a>/g, '</span>').replace(/ ↗/g, '').replace('这个游戏由 AI 用 guizang-game-skill 做成 · 看它是怎么做的', '这个游戏由 AI 用 guizang-game-skill 做成').replace(/https:\/\/github\.com\/op7418\/guizang-game-skill/g, 'guizang-game-skill（GitHub: op7418）').replace(/https:\/\/x\.com\/op7418/g, 'X @op7418').replace(/\(https:\/\/x\.com\/op7418\)/g, '(X @op7418)');
+html = html.replace(/<a ([^>]*)>/g, (m, at) => '<span ' + at.replace(/\s*(href|target|rel)="[^"]*"/g, '') + '>').replace(/<\/a>/g, '</span>').replace(/ ↗/g, '').replace('这个游戏由 AI 用 guizang-game-skill 做成 · 看它是怎么做的', '这个游戏由 AI 用 guizang-game-skill 做成').replace(/https:\/\/github\.com\/op7418\/guizang-game-skill/g, 'guizang-game-skill（GitHub: op7418）').replace(/\s*\(https:\/\/x\.com\/op7418\)/g, '').replace(/\s*https:\/\/x\.com\/op7418/g, '');
 html = html.replace(/(src|href)="assets\//g, '$1="./assets/').replace(/url\(assets\//g, 'url(./assets/');
 const first = (args) => { let d = 0, cur = '', out = []; for (const c of args) { if (c === '(') d++; if (c === ')') d--; if (c === ',' && d === 0) { out.push(cur.trim()); cur = ''; } else cur += c; } out.push(cur.trim()); return out; };
 html = html.replace(/<style>([\s\S]*?)<\/style>/, (m, css) => { css = css.replace(/inset:\s*0\s*;/g, 'top:0; right:0; bottom:0; left:0;').replace(/inset:\s*(-?[\d.]+px)\s+(-?[\d.]+px)\s*;/g, 'top:$1; bottom:$1; left:$2; right:$2;');
@@ -97,7 +98,7 @@ fs.writeFileSync(path.join(OUT, 'index.html'), html);
 // ---- static gates
 const bad = []; const scan = (name, txt, pats) => { for (const p of pats) { const m = txt.match(p); if (m) bad.push(`${name}: ${m[0]}`); } };
 scan('game.js', js, [/\bfetch\s*\(/, /XMLHttpRequest/, /WebAssembly/, /new Function\s*\(/, /\beval\s*\(/, /new (Shared)?Worker\s*\(/, /\bimport\s*\(/, /requestFullscreen/, /window\.open\s*\(/, /navigator\.(clipboard|geolocation|serviceWorker)/, /devicemotion|deviceorientation/i, /https?:\/\/(?!www\.w3\.org)[\w.-]+\/[^\s"'`)]*\.(js|css|png|jpg|glb|mp3|woff2?)/]);
-scan('index.html', html, [/<script(?![^>]*\bsrc=)[^>]*>/, /type="module"/, /\son\w+="/, /target="_blank"/, /<iframe|<object|<base /, /(src|href)="https?:/, /url\(https?:/, /javascript:/]);
+scan("game.js", js, [/x\.com\/|twitter\.com/i]); scan("index.html", html, [/x\.com\/|twitter|@op7418/i]); scan('index.html', html, [/<script(?![^>]*\bsrc=)[^>]*>/, /type="module"/, /\son\w+="/, /target="_blank"/, /<iframe|<object|<base /, /(src|href)="https?:/, /url\(https?:/, /javascript:/]);
 const types = new Set(); const walk = (d) => { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const f = path.join(d, e.name); if (e.isDirectory()) walk(f); else types.add(path.extname(f).toLowerCase()); } }; walk(OUT);
 const okT = new Set(['.html', '.css', '.js', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.woff', '.woff2', '.json']); for (const t of types) if (!okT.has(t)) bad.push('file type not allowed: ' + t);
 fs.rmSync(ZIP, { force: true }); execFileSync('zip', ['-q', '-r', '-9', path.resolve(ZIP), '.', '-x', '*.DS_Store'], { cwd: OUT });
